@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Welcome Hero Banner -->
+<div class="dashboard-hero">
+  <div class="hero-content">
+    <p class="hero-greeting">Welcome back, <strong>{{ session["user"] }}</strong> 👋</p>
+    <h1 class="hero-title">Find Your Skill Gaps.<br>Build Your Future.</h1>
+    <p class="hero-desc">Select a domain, enter the skills you already know, and instantly discover what you need to learn to land your next role or internship.</p>
+    <div class="hero-pills">
+      <span class="hero-pill">Web Development</span>
+      <span class="hero-pill">AI / ML</span>
+      <span class="hero-pill">Android</span>
+      <span class="hero-pill">Cybersecurity</span>
+      <span class="hero-pill">Cloud</span>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-orbit">
+      <div class="orbit-ring ring-1">
+        <div class="orbit-dot dot-a"></div>
+      </div>
+      <div class="orbit-ring ring-2">
+        <div class="orbit-dot dot-b"></div>
+      </div>
+      <div class="orbit-center">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Stats strip -->
+<div class="stats-strip">
+  <div class="stat-card" style="animation-delay:.05s">
+    <div class="stat-icon blue">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B6AF0" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+      </svg>
+    </div>
+    <div>
+      <h3>{{ domains|length }}</h3>
+      <p>Domains Available</p>
+    </div>
+  </div>
+  <div class="stat-card" style="animation-delay:.12s">
+    <div class="stat-icon green">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34c48b" stroke-width="2">
+        <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+      </svg>
+    </div>
+    <div>
+      <h3>100%</h3>
+      <p>Free Resources</p>
+    </div>
+  </div>
+  <div class="stat-card" style="animation-delay:.19s">
+    <div class="stat-icon orange">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f8aa4b" stroke-width="2">
+        <path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/>
+      </svg>
+    </div>
+    <div>
+      <h3>Instant</h3>
+      <p>Gap Detection</p>
+    </div>
+  </div>
+  <div class="stat-card" style="animation-delay:.26s">
+    <div class="stat-icon red">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f25c5c" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+      </svg>
+    </div>
+    <div>
+      <h3>Guided</h3>
+      <p>Learning Path</p>
+    </div>
+  </div>
+</div>
+
+<!-- How it works -->
+<div class="how-section">
+  <h3 class="section-title">How it works</h3>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-num">1</div>
+      <div>
+        <h4>Choose a Domain</h4>
+        <p>Pick the tech field you want to enter — Web Dev, AI/ML, Cloud, and more.</p>
+      </div>
+    </div>
+    <div class="how-arrow">→</div>
+    <div class="how-step">
+      <div class="how-num">2</div>
+      <div>
+        <h4>Enter Your Skills</h4>
+        <p>List the skills you already know. We'll compare them against industry needs.</p>
+      </div>
+    </div>
+    <div class="how-arrow">→</div>
+    <div class="how-step">
+      <div class="how-num">3</div>
+      <div>
+        <h4>Get Your Roadmap</h4>
+        <p>See missing skills, curated resources, and a step-by-step learning roadmap.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Analysis Form -->
+<div class="card analysis-form-card">
+  <div class="form-card-header">
+    <div class="form-card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+    </div>
+    <div>
+      <h4>Analyze Your Skills</h4>
+      <p>Takes less than 30 seconds</p>
+    </div>
+  </div>
+
+  <form method="POST" action="/analyze">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Select Domain</label>
+        <select class="form-control" name="domain">
+          {% for d in domains %}
+          <option>{{ d }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group" style="flex:2">
+        <label class="form-label">Your Current Skills</label>
+        <input class="form-control" name="skills" placeholder="e.g. java, python, html, css" required>
+        <small style="font-size:.76rem;color:var(--text-light);margin-top:5px;display:block;">Separate each skill with a comma</small>
+      </div>
+    </div>
+    <button class="btn btn-primary" type="submit">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      Analyze My Skills
+    </button>
+  </form>
+</div>
+
+{% endblock %}

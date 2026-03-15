@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <div class="auth-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <h1>SkillGap</h1>
+    </div>
+
+    <h3>Create account</h3>
+    <p class="auth-sub">Start mapping your skills to industry roles</p>
+
+    {% if error %}
+    <script>alert("User already exists. Please login.");</script>
+    {% endif %}
+
+    <form method="POST">
+
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input class="form-control" name="username" placeholder="Choose a username" required autocomplete="username">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-control" name="password" placeholder="Create a password" required autocomplete="new-password">
+      </div>
+
+      <button class="btn btn-primary btn-w100" type="submit">Create Account</button>
+    </form>
+
+    <p class="auth-footer">
+      Already have an account? <a href="/">Sign in</a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}

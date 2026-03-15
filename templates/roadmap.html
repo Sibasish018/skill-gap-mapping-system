@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="roadmap-page">
+
+  <div class="roadmap-hero">
+    <div class="roadmap-hero-text">
+      <p class="roadmap-label">Learning Roadmap</p>
+      <h2>{{ domain }}</h2>
+      <p class="roadmap-sub">Complete each milestone to master this domain</p>
+    </div>
+    <div class="roadmap-hero-stat">
+      <div class="hero-ring">
+        <svg viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="34" stroke="rgba(255,255,255,.2)" stroke-width="7" fill="none"/>
+          <circle cx="40" cy="40" r="34" stroke="white" stroke-width="7" fill="none"
+            stroke-dasharray="213.6"
+            stroke-dashoffset="{{ (213.6 - (213.6 * completed_steps|length / steps|length))|int if steps|length > 0 else 213 }}"
+            stroke-linecap="round"
+            transform="rotate(-90 40 40)"/>
+        </svg>
+        <div class="ring-label">
+          <strong>{{ completed_steps|length }}</strong>
+          <small>/ {{ steps|length }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form action="/update_progress" method="POST" class="roadmap-form">
+    <input type="hidden" name="domain" value="{{ domain }}">
+
+    <div class="roadmap-timeline">
+      {% for step in steps %}
+      {% set is_done = step in completed_steps %}
+      {% set is_next = not is_done and (loop.first or steps[loop.index0 - 1] in completed_steps) %}
+
+      <div class="timeline-item {{ 'done' if is_done else ('next' if is_next else '') }}">
+
+        <div class="timeline-left">
+          <div class="timeline-node">
+            {% if is_done %}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+              <path d="M20 6L9 17l-5-5"/>
+            </svg>
+            {% elif is_next %}
+            <div class="node-pulse"></div>
+            {{ loop.index }}
+            {% else %}
+            {{ loop.index }}
+            {% endif %}
+          </div>
+          {% if not loop.last %}
+          <div class="timeline-line {{ 'filled' if is_done else '' }}"></div>
+          {% endif %}
+        </div>
+
+        <div class="timeline-card {{ 'done' if is_done else ('next' if is_next else '') }}">
+          <div class="tc-inner">
+            <div class="tc-text">
+              <span class="tc-step-num">Step {{ loop.index }}</span>
+              <h4>{{ step }}</h4>
+              {% if is_done %}
+              <span class="tc-badge done-badge">Completed</span>
+              {% elif is_next %}
+              <span class="tc-badge next-badge">Up Next</span>
+              {% else %}
+              <span class="tc-badge pending-badge">Pending</span>
+              {% endif %}
+            </div>
+            <button type="submit" name="step" value="{{ step }}" class="tc-btn {{ 'tc-btn-undo' if is_done else 'tc-btn-do' }}">
+              {% if is_done %}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12a9 9 0 1018 0 9 9 0 00-18 0"/><path d="M9 12l2 2 4-4"/></svg>
+              Done
+              {% else %}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              Mark Done
+              {% endif %}
+            </button>
+          </div>
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+
+  </form>
+
+  <div class="roadmap-actions">
+    <a href="/analyze" class="btn btn-primary">← Back to Results</a>
+    <a href="/analysis" class="btn btn-secondary">New Analysis</a>
+  </div>
+
+</div>
+
+{% endblock %}

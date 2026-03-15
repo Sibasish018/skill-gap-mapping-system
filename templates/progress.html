@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+  <h2>My Progress</h2>
+  <p>Your learning journey across all domains</p>
+</div>
+
+{% if progress_data %}
+  <div class="progress-domains-grid">
+    {% for item in progress_data %}
+    <div class="progress-domain-card">
+
+      <div class="pdc-header">
+        <div class="pdc-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div>
+          <h3>{{ item.domain }}</h3>
+          <span class="pdc-count">{{ item.completed }} of {{ item.total }} steps</span>
+        </div>
+        <div class="pdc-percent">{{ item.pct }}%</div>
+      </div>
+
+      <div class="pdc-bar-track">
+        <div class="pdc-bar-fill" data-pct="{{ item.pct }}"></div>
+      </div>
+
+      <div class="pdc-steps">
+        {% for step in item.steps %}
+        <div class="pdc-step {{ 'done' if step.completed else '' }}">
+          <div class="pdc-step-dot"></div>
+          <span>{{ step.name }}</span>
+          {% if step.completed %}
+          <svg class="pdc-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+
+      <a href="/roadmap/{{ item.domain }}" class="btn btn-primary" style="margin-top:16px;width:100%;justify-content:center;">
+        Continue Learning →
+      </a>
+
+    </div>
+    {% endfor %}
+  </div>
+
+{% else %}
+  <div class="empty-state">
+    <div class="empty-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/>
+      </svg>
+    </div>
+    <h3>No progress yet</h3>
+    <p>Start a skill analysis and open a roadmap to track your learning journey.</p>
+    <a href="/analysis" class="btn btn-primary" style="margin-top:16px;">Start Analysis</a>
+  </div>
+{% endif %}
+
+<script>
+  window.addEventListener("load", function() {
+    document.querySelectorAll(".pdc-bar-fill").forEach(function(bar) {
+      var pct = bar.getAttribute("data-pct");
+      bar.style.width = pct + "%";
+    });
+  });
+</script>
+
+{% endblock %}
