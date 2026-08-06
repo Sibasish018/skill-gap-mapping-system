@@ -10,7 +10,7 @@ app.secret_key = "skillgapsecret"
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:BYXrPiTKlaotvlnfGtBeNyVxpBstwXhp@interchange.proxy.rlwy.net:30916/railway"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "pool_pre_ping": True,   # 🔥 VERY IMPORTANT (auto reconnect)
+    "pool_pre_ping": True,   # VERY IMPORTANT (auto reconnect)
     "pool_recycle": 280,     # reconnect before timeout
 }
 
